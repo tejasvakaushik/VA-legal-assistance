@@ -1,0 +1,68 @@
+import speech\_recognition as sr
+from googletrans import Translator
+
+# Legal service directory
+
+legal\_services = {
+"shelter": \["Safe Haven Shelter - 123 Main St", "Hope House - 456 Elm St"],
+"lawyers": \["John Doe - (555) 123-4567", "Jane Smith - (555) 987-6543"],
+"courts": \["District Court - 789 Court Ave", "Supreme Court - 101 Justice Rd"]
+}
+
+def recognize\_speech():
+recognizer = sr.Recognizer()
+with sr.Microphone() as source:
+print("Speak now\...")
+recognizer.adjust\_for\_ambient\_noise(source)
+audio = recognizer.listen(source)
+try:
+text = recognizer.recognize\_google(audio)
+print(f"Recognized: {text}")
+return text
+except sr.UnknownValueError:
+print("Could not understand audio.")
+return None
+except sr.RequestError:
+print("Request error.")
+return None
+
+def translate\_text(text, dest\_lang="en"):
+translator = Translator()
+translated = translator.translate(text, dest=dest\_lang)
+return translated.text
+
+def get\_legal\_service(category):
+return legal\_services.get(category.lower(), "Service not found")
+
+# Main function
+
+def main():
+print("Welcome to the Legal Assistance App!")
+print("Say 'translate' to translate a phrase or ask for legal resources.")
+
+```
+command = recognize_speech()
+
+if command:
+    if "translate" in command.lower():
+        print("Say something to translate:")
+        text_to_translate = recognize_speech()
+        if text_to_translate:
+            translated_text = translate_text(text_to_translate, dest_lang="hi")  # Example: Translating to Hindi
+            print(f"Translated: {translated_text}")
+    
+    elif "shelter" in command.lower():
+        print("Available shelters:", get_legal_service("shelter"))
+    
+    elif "lawyer" in command.lower():
+        print("Available lawyers:", get_legal_service("lawyers"))
+    
+    elif "court" in command.lower():
+        print("Available courts:", get_legal_service("courts"))
+    
+    else:
+        print("Unknown command. Please try again.")
+```
+
+if **name** == "**main**":
+main()
